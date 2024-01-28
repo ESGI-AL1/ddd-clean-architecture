@@ -4,7 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportPourTous.Application",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportPourTous.Domain", "SportPourTous.Domain\SportPourTous.Domain.csproj", "{C03AA9C6-B360-415F-A676-23D16541675C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportPourTous.Infratstructure", "SportPourTous.Infratstructure\SportPourTous.Infratstructure.csproj", "{0156282E-C640-4219-BDC3-AD51CD231D05}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportPourTous.Infrastructure", "SportPourTous.Infrastructure\SportPourTous.Infrastructure.csproj", "{0156282E-C640-4219-BDC3-AD51CD231D05}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportPourTous.Web", "SportPourTous.Web\SportPourTous.Web.csproj", "{A2F1545D-83E3-4FD1-BEDC-82BE6AD90FBC}"
 EndProject

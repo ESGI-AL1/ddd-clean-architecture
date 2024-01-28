@@ -2,5 +2,6 @@ namespace SportPourTous.Domain.ValueObjects;
 
 public class Location
 {
-    public string Name { get; set; } = "";
+    public Guid LocationId { get; set; }
+    public string LocationName { get; set; } = "";
 }

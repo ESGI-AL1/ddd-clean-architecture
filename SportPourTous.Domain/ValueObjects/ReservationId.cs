@@ -1,26 +1,34 @@
-namespace SportPourTous.Domain.ValueObjects;
+using System;
 
-public class ReservationId
+namespace SportPourTous.Domain.ValueObjects
 {
-    private readonly Guid _id;
+    public class ReservationId
+    {
+        public Guid Id { get; private set; }
 
-    public ReservationId()
-    {
-        _id = Guid.NewGuid();
-    }
+        public ReservationId()
+        {
+            Id = Guid.NewGuid();
+        }
 
-    public ReservationId(Guid id)
-    {
-        _id = id;
-    }
-    
-    public override string ToString()
-    {
-        return _id.ToString();
-    }
-    
-    public override int GetHashCode()
-    {
-        return _id.GetHashCode();
+        public ReservationId(Guid id)
+        {
+            Id = id;
+        }
+
+        public override string ToString()
+        {
+            return Id.ToString();
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
+
+        public Guid ToGuid()
+        {
+            return Id;
+        }
     }
 }

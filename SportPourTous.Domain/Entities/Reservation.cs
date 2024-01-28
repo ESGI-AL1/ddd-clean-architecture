@@ -1,34 +1,57 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using SportPourTous.Domain.ValueObjects;
 
-namespace SportPourTous.Domain.Entities;
-/*
- * Reservation is an Entity
- * It is at the core of the domain
- * We can track this entity during the lifecycle of the application
- */
-public class Reservation
+namespace SportPourTous.Domain.Entities
 {
-    public ReservationId ReservationId { get; init; }
-    public ClientId ClientId { get; set; } 
-    public DateOnly Date { get; set; }
-    public DateTime BeginningHour { get; set; }
-    public DateTime EndingHour { get; set; }
-    public Location Location { get; set; }
-    public List<Equipement>? Equipement { get; set; }
-    public List<Prestation>? Prestation { get; set; }
-    
-    public Reservation(DateOnly date, DateTime beginningHour, DateTime endingHour, Location location, ClientId clientId)
+    /*
+     * Reservation is an Entity
+     * It is at the core of the domain
+     * We can track this entity during the lifecycle of the application
+     */
+    public class Reservation
     {
-        if (endingHour <= beginningHour)
+        private ReservationId _reservationId;
+        public ReservationId ReservationId
         {
-            throw new ArgumentException("Invalid ending hour.");
+            get
+            {
+                // Generate a new ReservationId if it's not already assigned
+                if (_reservationId == null)
+                {
+                    _reservationId = new ReservationId();
+                }
+                return _reservationId;
+            }
+            set { _reservationId = value; }
         }
 
-        ReservationId = new ReservationId();
-        ClientId = clientId ?? throw new ArgumentNullException(nameof(clientId), "ClientId cannot be null.");
-        Date = date;
-        BeginningHour = beginningHour;
-        EndingHour = endingHour;
-        Location = location ?? throw new ArgumentNullException(nameof(location),
-            "Location cannot be null.");    }
+        
+        [JsonPropertyName("date")]
+        [Required]
+        [DataType(DataType.Date)]
+        public DateOnly Date { get; set; }
+
+        [JsonPropertyName("beginning_hour")]
+        [Required]
+        [DataType(DataType.DateTime)]
+        public DateTime BeginningHour { get; set; }
+
+        [JsonPropertyName("ending_hour")]
+        [Required]
+        [DataType(DataType.DateTime)]
+        public DateTime EndingHour { get; set; }
+
+        [JsonPropertyName("location_id")] 
+        public Guid LocationId { get; set; } 
+
+        [JsonPropertyName("location")]
+        [Required]
+        public Location Location { get; set; } 
+        
+        [JsonConstructor]
+        public Reservation() {}
+    }
 }
