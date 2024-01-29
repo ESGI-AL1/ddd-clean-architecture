@@ -1,24 +1,20 @@
 using Microsoft.EntityFrameworkCore;
-using SportPourTous.Application.Services;
-using SportPourTous.Domain.Interfaces;
 using SportPourTous.Infrastructure.Database;
-using SportPourTous.Infrastructure.Repositories;
+using Microsoft.AspNetCore.OpenApi;
+using SportPourTous.Domain.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddScoped<ReservationService>();
 
-builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Registering necessary services for the program
+builder.Services.AddDbContext<DatabaseContext>(opt => opt.UseInMemoryDatabase("reservations"));
+builder.Services.AddControllers(); 
+
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddControllers();
-// Added in memory database
-builder.Services.AddDbContext<DatabaseContext>(options =>
-    options.UseInMemoryDatabase("InMemoryDatabase"));
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -26,10 +22,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthorization();
 app.MapControllers();
-app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+app.Run();

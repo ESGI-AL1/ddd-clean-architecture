@@ -1,100 +1,66 @@
-using Microsoft.AspNetCore.Mvc;
-using SportPourTous.Application.Services;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SportPourTous.Domain.Entities;
-using SportPourTous.Domain.ValueObjects;
+using SportPourTous.Infrastructure.Database;
 
-namespace SportPourTous.Web.Controller
+namespace SportPourTous.Web.Controllers 
 {
     [ApiController]
-    [Route("[controller]")]
-    public class ReservationController : ControllerBase
+    [Route("api/reservations")]
+    public class ReservationsController : ControllerBase
     {
-        private readonly ReservationService _reservationService;
+        private readonly DatabaseContext _db;
 
-        public ReservationController(ReservationService reservationService)
+        public ReservationsController(DatabaseContext db)
         {
-            _reservationService = reservationService;
+            _db = db;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllReservations()
         {
-            try
-            {
-                var reservations = await _reservationService.GetAllReservationsAsync();
-                return Ok(reservations);
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions and return an appropriate error response.
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            var reservations = await _db.Reservations.ToListAsync();
+            return Ok(reservations);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetReservationById([FromRoute] ReservationId id)
+        public async Task<IActionResult> GetReservation(Guid id)
         {
-            try
-            {
-                var reservation = await _reservationService.GetReservationByIdAsync(id);
-                if (reservation == null)
-                {
-                    return NotFound(); // Return 404 if the reservation is not found.
-                }
-                return Ok(reservation);
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions and return an appropriate error response.
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            var reservation = await _db.Reservations.FindAsync(id);
+            if (reservation == null) return NotFound();
+            return Ok(reservation);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateReservation([FromBody] Reservation reservation)
+        public async Task<IActionResult> CreateReservation(Reservation reservation)
         {
-            try
-            {
-                await _reservationService.CreateReservationAsync(reservation);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            await _db.Reservations.AddAsync(reservation);
+            await _db.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetReservation), new { id = reservation.Id }, reservation);
         }
 
-
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateReservation([FromRoute] ReservationId id, [FromBody] Reservation reservationDto)
+        public async Task<IActionResult> UpdateReservation(Guid id, Reservation updatedReservation)
         {
-            try
-            {
-                // You can implement the logic for updating a reservation here, using the service.
-                // For example: var updatedReservation = await _reservationService.UpdateReservationAsync(id, reservationDto);
+            var reservation = await _db.Reservations.FindAsync(id);
+            if (reservation == null) return NotFound();
 
-                return Ok(); // Return a success response.
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions and return an appropriate error response.
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            reservation.BeginningHour = updatedReservation.BeginningHour;
+            reservation.EndingHour = updatedReservation.EndingHour;
+
+            await _db.SaveChangesAsync();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteReservation([FromRoute] ReservationId id)
+        public async Task<IActionResult> DeleteReservation(Guid id)
         {
-            try
-            {
-                await _reservationService.DeleteReservationAsync(id);
-                return NoContent(); // Return a success response with no content.
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions and return an appropriate error response.
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            var reservation = await _db.Reservations.FindAsync(id);
+            if (reservation == null) return NotFound();
+
+            _db.Reservations.Remove(reservation);
+            await _db.SaveChangesAsync();
+            return Ok();
         }
     }
 }
