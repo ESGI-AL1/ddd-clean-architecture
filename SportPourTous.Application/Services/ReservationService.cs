@@ -44,7 +44,6 @@ namespace SportPourTous.Application.Services
             return await _reservationRepository.CreateReservation(reservation);
         }
 
-
         public async Task<Guid> UpdateReservation(Guid id, Reservation reservation)
         {
             return await _reservationRepository.UpdateReservation(id, reservation);
