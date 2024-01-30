@@ -1,6 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using SportPourTous.Application.Services;
-using SportPourTous.Domain.Interfaces;
 using SportPourTous.Infrastructure.Database;
 using SportPourTous.Infrastructure.Repositories;
 using SportPourTous.Web.Middleware;

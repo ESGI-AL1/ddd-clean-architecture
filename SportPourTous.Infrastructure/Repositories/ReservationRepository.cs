@@ -6,7 +6,7 @@ using SportPourTous.Infrastructure.Exceptions;
 
 namespace SportPourTous.Infrastructure.Repositories
 {
-    public class ReservationRepository : IReservationRepository
+    public class ReservationRepository : IReservation 
     {
         private readonly DatabaseContext _context;
 

@@ -15,7 +15,7 @@ namespace SportPourTous.Web.Controllers
 
         public ReservationsController(IReservationService reservationService)
         {
-            _reservationService = reservationService;
+            _db = db;
         }
 
         [HttpGet]
