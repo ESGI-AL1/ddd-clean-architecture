@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SportPourTous.Application.Interfaces;
 using SportPourTous.Application.Services;
 using SportPourTous.Domain.Interfaces;
 using SportPourTous.Infrastructure.Database;
@@ -8,7 +9,8 @@ using SportPourTous.Web.Middleware;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
-builder.Services.AddScoped<IReservationService, ReservationService>(); 
+builder.Services.AddScoped<IReservationService, ReservationService>();
+builder.Services.AddScoped<IGetReservationQueryHandler, GetReservationQueryHandler>();
 
 builder.Services.AddDbContext<DatabaseContext>(opt => opt.UseInMemoryDatabase("reservations"));
 builder.Services.AddControllers();

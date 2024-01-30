@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using SportPourTous.Application.Interfaces;
+using SportPourTous.Domain.CQRS.Queries;
 using SportPourTous.Domain.Entities;
 using SportPourTous.Domain.Interfaces;
 using SportPourTous.Infrastructure.Exceptions;
@@ -13,12 +15,14 @@ namespace SportPourTous.Web.Controllers
     public class ReservationsController : ControllerBase
     {
         private readonly IReservationService _reservationService;
-        private readonly IMapper _mapper;
+        private readonly IGetReservationQueryHandler _getReservationQueryHandler;
 
-        public ReservationsController(IReservationService reservationService, IMapper mapper)
+
+        public ReservationsController(IReservationService reservationService, IGetReservationQueryHandler getReservationQueryHandler)
         {
             _reservationService = reservationService;
-            _mapper = mapper;   
+            _getReservationQueryHandler = getReservationQueryHandler;
+
         }
 
         [HttpGet]
@@ -31,15 +35,9 @@ namespace SportPourTous.Web.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetReservation(Guid id)
         {
-            try
-            {
-                var reservation = await _reservationService.GetReservation(id);
-                return Ok(reservation);
-            }
-            catch(ReservationNotFoundException ex)
-            {
-                return NotFound(ex.Message);  
-            }            
+            var query = new GetReservationQuery { Id = id };
+            var reservation = await _getReservationQueryHandler.Handle(query);
+            return Ok(reservation);
         }
 
         [HttpPost]
