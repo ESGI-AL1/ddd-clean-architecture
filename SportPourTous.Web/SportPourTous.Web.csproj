@@ -19,9 +19,4 @@
       <ProjectReference Include="..\SportPourTous.Infrastructure\SportPourTous.Infrastructure.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="DTO\" />
-      <Folder Include="Mapping\" />
-    </ItemGroup>
-
 </Project>

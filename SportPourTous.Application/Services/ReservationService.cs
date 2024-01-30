@@ -25,7 +25,8 @@ namespace SportPourTous.Application.Services
         public async Task<Guid> CreateReservation(Reservation reservation)
         {
             reservation = new Reservation { Id = Guid.NewGuid() }; 
-            return await _reservationRepository.CreateReservation(reservation);
+            await _reservationRepository.CreateReservation(reservation);
+            return reservation.Id;  
         }
 
         public async Task<Guid> UpdateReservation(Guid id, Reservation reservation)

@@ -11,8 +11,9 @@ builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 builder.Services.AddScoped<IReservationService, ReservationService>(); 
 
 builder.Services.AddDbContext<DatabaseContext>(opt => opt.UseInMemoryDatabase("reservations"));
-builder.Services.AddControllers(); 
+builder.Services.AddControllers();
 
+builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -30,7 +31,6 @@ app.UseMiddleware<GlobalErrorHandlerMiddleware>();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-
 
 app.UseHttpsRedirection();
 app.UseAuthorization();

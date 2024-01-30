@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using SportPourTous.Domain.Entities;
 using SportPourTous.Domain.Interfaces;
 using SportPourTous.Infrastructure.Exceptions;
+using SportPourTous.Web.DTO;
 
 
 namespace SportPourTous.Web.Controllers 
@@ -11,10 +13,12 @@ namespace SportPourTous.Web.Controllers
     public class ReservationsController : ControllerBase
     {
         private readonly IReservationService _reservationService;
+        private readonly IMapper _mapper;
 
-        public ReservationsController(IReservationService reservationService)
+        public ReservationsController(IReservationService reservationService, IMapper mapper)
         {
             _reservationService = reservationService;
+            _mapper = mapper;   
         }
 
         [HttpGet]
@@ -39,10 +43,11 @@ namespace SportPourTous.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateReservation(Reservation reservation)
+        public async Task<ActionResult<ReservationIdResponseDto>> CreateReservation(Reservation reservation)
         {
-            await _reservationService.CreateReservation(reservation);
-            return CreatedAtAction(nameof(GetReservation), new { id = reservation.Id }, reservation);
+            var reservationId = await _reservationService.CreateReservation(reservation);
+            var reservationDto = new ReservationIdResponseDto { Id = reservationId };
+            return CreatedAtAction(nameof(GetReservation), new { id = reservationId }, reservationDto);
         }
 
         [HttpPut("{id}")]
