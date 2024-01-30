@@ -12,7 +12,7 @@ namespace SportPourTous.Infrastructure.Repositories
 
         public ReservationRepository(DatabaseContext context)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _context = context
         }
 
         public async Task<Reservation?> GetReservation(Guid id)
