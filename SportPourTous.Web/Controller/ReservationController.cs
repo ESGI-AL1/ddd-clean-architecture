@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
 using SportPourTous.Domain.Entities;
 using SportPourTous.Domain.Interfaces;
 using SportPourTous.Infrastructure.Exceptions;
@@ -15,7 +14,7 @@ namespace SportPourTous.Web.Controllers
 
         public ReservationsController(IReservationService reservationService)
         {
-            _db = db;
+            _reservationService = reservationService;
         }
 
         [HttpGet]

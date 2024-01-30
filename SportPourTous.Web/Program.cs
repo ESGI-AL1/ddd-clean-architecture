@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using SportPourTous.Application.Services;
+using SportPourTous.Domain.Interfaces;
 using SportPourTous.Infrastructure.Database;
 using SportPourTous.Infrastructure.Repositories;
 using SportPourTous.Web.Middleware;
@@ -10,6 +12,7 @@ builder.Services.AddScoped<IReservationService, ReservationService>();
 
 builder.Services.AddDbContext<DatabaseContext>(opt => opt.UseInMemoryDatabase("reservations"));
 builder.Services.AddControllers(); 
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -23,6 +26,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<GlobalErrorHandlerMiddleware>();
+
+app.UseHttpsRedirection();
+app.UseAuthorization();
+app.MapControllers();
+
 
 app.UseHttpsRedirection();
 app.UseAuthorization();

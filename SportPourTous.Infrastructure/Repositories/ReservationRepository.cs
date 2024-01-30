@@ -6,7 +6,7 @@ using SportPourTous.Infrastructure.Exceptions;
 
 namespace SportPourTous.Infrastructure.Repositories
 {
-    public class ReservationRepository : IReservation 
+    public class ReservationRepository : IReservationRepository
     {
         private readonly DatabaseContext _context;
 
@@ -32,7 +32,7 @@ namespace SportPourTous.Infrastructure.Repositories
 
         public async Task<Guid> CreateReservation(Reservation reservation)
         {
-            if (reservation == null) throw new ArgumentNullException(nameof(reservation));
+            ArgumentNullException.ThrowIfNull(reservation, nameof(reservation));
 
             await _context.Reservations.AddAsync(reservation);
             await _context.SaveChangesAsync();
@@ -42,7 +42,7 @@ namespace SportPourTous.Infrastructure.Repositories
 
         public async Task<Guid> UpdateReservation(Guid id, Reservation updatedReservation)
         {
-            if (updatedReservation == null) throw new ArgumentNullException(nameof(updatedReservation));
+            ArgumentNullException.ThrowIfNull(updatedReservation, nameof(updatedReservation));
 
             var reservation = await GetReservation(id);
 
