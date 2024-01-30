@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using SportPourTous.Application.Interfaces;
 using SportPourTous.Domain.CQRS.Queries;
@@ -16,20 +17,28 @@ namespace SportPourTous.Web.Controllers
     {
         private readonly IReservationService _reservationService;
         private readonly IGetReservationQueryHandler _getReservationQueryHandler;
+        private readonly IDeleteReservationCommandHandler _deleteReservationCommandHandler;
+        private readonly IMapper _mapper;
 
 
-        public ReservationsController(IReservationService reservationService, IGetReservationQueryHandler getReservationQueryHandler)
+
+        public ReservationsController(IReservationService reservationService, 
+                                      IGetReservationQueryHandler getReservationQueryHandler,
+                                      IDeleteReservationCommandHandler deleteReservationCommandHandler,
+                                      IMapper mapper)
         {
             _reservationService = reservationService;
             _getReservationQueryHandler = getReservationQueryHandler;
-
+            _deleteReservationCommandHandler = deleteReservationCommandHandler;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllReservations()
         {
             var reservations = await _reservationService.GetAllReservations();
-            return Ok(reservations);
+            var reservationDto = _mapper.Map<List<ReservationResponseDto>>(reservations);
+            return Ok(reservationDto);
         }
 
         [HttpGet("{id}")]
@@ -41,11 +50,18 @@ namespace SportPourTous.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ReservationIdResponseDto>> CreateReservation(Reservation reservation)
+        public async Task<IActionResult> CreateReservation(Reservation reservation)
         {
-            var reservationId = await _reservationService.CreateReservation(reservation);
-            var reservationDto = new ReservationIdResponseDto { Id = reservationId };
-            return CreatedAtAction(nameof(GetReservation), new { id = reservationId }, reservationDto);
+            try
+            {
+                var reservationId = await _reservationService.CreateReservation(reservation);
+                var reservationDto = new ReservationIdResponseDto { Id = reservationId };
+                return CreatedAtAction(nameof(GetReservation), new { id = reservationId }, reservationDto);
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Errors);
+            }
         }
 
         [HttpPut("{id}")]
@@ -69,7 +85,7 @@ namespace SportPourTous.Web.Controllers
         {
             try
             {
-                await _reservationService.DeleteReservation(id);
+                await _deleteReservationCommandHandler.Handle(id);
                 return Ok();
             }
             catch(ReservationNotFoundException ex)

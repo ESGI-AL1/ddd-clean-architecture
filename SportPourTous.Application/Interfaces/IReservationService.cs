@@ -11,6 +11,5 @@ namespace SportPourTous.Domain.Interfaces
         Task<IEnumerable<Reservation>> GetAllReservations();
         Task<Guid> CreateReservation(Reservation reservation);
         Task<Guid> UpdateReservation(Guid id, Reservation reservation);
-        Task DeleteReservation(Guid id);
     }
 }
