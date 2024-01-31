@@ -26,7 +26,7 @@ namespace SportPourTous.Web.Middleware
 
         private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            var code = HttpStatusCode.InternalServerError; // 500 if unexpected
+            var code = HttpStatusCode.InternalServerError; 
 
             if (exception is ReservationNotFoundException) code = HttpStatusCode.NotFound;
 
