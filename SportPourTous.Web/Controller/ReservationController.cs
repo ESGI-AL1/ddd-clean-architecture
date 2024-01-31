@@ -2,12 +2,12 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using SportPourTous.Application.Interfaces;
+using SportPourTous.Domain.CQRS.Commands;
 using SportPourTous.Domain.CQRS.Queries;
 using SportPourTous.Domain.Entities;
 using SportPourTous.Domain.Interfaces;
 using SportPourTous.Infrastructure.Exceptions;
 using SportPourTous.Web.DTO;
-
 
 namespace SportPourTous.Web.Controllers 
 {
@@ -18,18 +18,19 @@ namespace SportPourTous.Web.Controllers
         private readonly IReservationService _reservationService;
         private readonly IGetReservationQueryHandler _getReservationQueryHandler;
         private readonly IDeleteReservationCommandHandler _deleteReservationCommandHandler;
+        private readonly ICreateReservationCommandHandler _createReservationCommandHandler;
         private readonly IMapper _mapper;
-
-
 
         public ReservationsController(IReservationService reservationService, 
                                       IGetReservationQueryHandler getReservationQueryHandler,
                                       IDeleteReservationCommandHandler deleteReservationCommandHandler,
+                                      ICreateReservationCommandHandler createReservationCommandHandler,
                                       IMapper mapper)
         {
             _reservationService = reservationService;
             _getReservationQueryHandler = getReservationQueryHandler;
             _deleteReservationCommandHandler = deleteReservationCommandHandler;
+            _createReservationCommandHandler = createReservationCommandHandler;
             _mapper = mapper;
         }
 
@@ -51,11 +52,12 @@ namespace SportPourTous.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateReservation(Reservation reservation)
+        public async Task<IActionResult> CreateReservation(CreateReservationDto reservation)
         {
             try
             {
-                var reservationId = await _reservationService.CreateReservation(reservation);
+                var command = _mapper.Map<CreateReservationCommand>(reservation);
+                var reservationId = await _createReservationCommandHandler.HandleCreateReservation(command);
                 var reservationDto = new ReservationIdResponseDto { Id = reservationId };
                 return CreatedAtAction(nameof(GetReservation), new { id = reservationId }, reservationDto);
             }
@@ -77,8 +79,6 @@ namespace SportPourTous.Web.Controllers
             {
                 return NotFound(ex.Message);
             }
-            
-            
         }
 
         [HttpDelete("{id}")]
@@ -93,7 +93,6 @@ namespace SportPourTous.Web.Controllers
             {
                 return NotFound(ex.Message);
             }
-            
         }
     }
 }

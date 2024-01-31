@@ -15,8 +15,7 @@ builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 builder.Services.AddScoped<IReservationService, ReservationService>();
 builder.Services.AddScoped<IGetReservationQueryHandler, GetReservationQueryHandler>();
 builder.Services.AddScoped<IDeleteReservationCommandHandler, DeleteReservationCommandHandler>();
-
-
+builder.Services.AddScoped<ICreateReservationCommandHandler, CreateReservationCommandHandler>();
 
 builder.Services.AddScoped<IValidator<Reservation>, ReservationValidator>();
 
