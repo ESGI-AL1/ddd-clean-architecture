@@ -13,9 +13,14 @@ public class GetReservationQueryHandler : IGetReservationQueryHandler
         _repository = repository;
     }
 
-    public async Task<Reservation> Handle(GetReservationQuery query)
+    public async Task<Reservation> HandleGetReservationById(GetReservationQuery query)
     {
         return await _repository.GetReservation(query.Id)
                ?? throw new ReservationNotFoundException(query.Id);
+    }
+
+    public async Task<IEnumerable<Reservation>> HandleGetAllReservations()
+    {
+        return await _repository.GetAllReservations();
     }
 }

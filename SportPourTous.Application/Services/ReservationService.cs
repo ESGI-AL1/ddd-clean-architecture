@@ -2,6 +2,7 @@
 using FluentValidation.Results;
 using SportPourTous.Domain.Entities;
 using SportPourTous.Domain.Interfaces;
+using SportPourTous.Infrastructure.Exceptions;
 
 namespace SportPourTous.Application.Services
 {
@@ -13,16 +14,6 @@ namespace SportPourTous.Application.Services
         {
             _reservationRepository = reservationRepository;
             _validator = validator;
-        }
-
-        public async Task<Reservation?> GetReservation(Guid id)
-        {
-            return await _reservationRepository.GetReservation(id);
-        }
-
-        public async Task<IEnumerable<Reservation>> GetAllReservations()
-        {
-            return await _reservationRepository.GetAllReservations();
         }
 
         public async Task<Guid> CreateReservation(Reservation reservation)
@@ -44,9 +35,26 @@ namespace SportPourTous.Application.Services
             return await _reservationRepository.CreateReservation(reservation);
         }
 
-        public async Task<Guid> UpdateReservation(Guid id, Reservation reservation)
+        public async Task<Guid> UpdateReservation(Guid id, Reservation updatedReservation)
         {
+            ValidationResult result = _validator.Validate(updatedReservation);
+            if (!result.IsValid)
+            {
+                throw new ValidationException("Invalid reservation data", result.Errors);
+            }
+
+            var reservation = await _reservationRepository.GetReservation(id);
+            if (reservation == null)
+            {
+                throw new ReservationNotFoundException(id);
+            }
+
+            reservation.ReservationDate = updatedReservation.ReservationDate;
+            reservation.BeginningHour = updatedReservation.BeginningHour;
+            reservation.EndingHour = updatedReservation.EndingHour;
+
             return await _reservationRepository.UpdateReservation(id, reservation);
         }
+
     }
 }

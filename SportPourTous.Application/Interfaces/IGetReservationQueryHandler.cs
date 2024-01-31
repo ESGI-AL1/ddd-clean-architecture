@@ -5,6 +5,7 @@ namespace SportPourTous.Application.Interfaces
 {
     public interface IGetReservationQueryHandler
     {
-        Task<Reservation> Handle(GetReservationQuery handler);  
+        Task<IEnumerable<Reservation>> HandleGetAllReservations();   
+        Task<Reservation> HandleGetReservationById(GetReservationQuery handler);  
     }
 }

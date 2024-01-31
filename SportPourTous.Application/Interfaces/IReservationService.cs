@@ -7,8 +7,6 @@ namespace SportPourTous.Domain.Interfaces
 {
     public interface IReservationService
     {
-        Task<Reservation?> GetReservation(Guid id);
-        Task<IEnumerable<Reservation>> GetAllReservations();
         Task<Guid> CreateReservation(Reservation reservation);
         Task<Guid> UpdateReservation(Guid id, Reservation reservation);
     }

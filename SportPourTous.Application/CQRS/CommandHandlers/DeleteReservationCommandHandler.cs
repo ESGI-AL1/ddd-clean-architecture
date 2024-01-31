@@ -1,7 +1,7 @@
 ﻿using SportPourTous.Application.Interfaces;
 using SportPourTous.Domain.Interfaces;
 
-namespace SportPourTous.Application.Services
+namespace SportPourTous.Application.CQRS.CommandHandlers
 {
     public class DeleteReservationCommandHandler : IDeleteReservationCommandHandler
     {

@@ -36,17 +36,18 @@ namespace SportPourTous.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllReservations()
         {
-            var reservations = await _reservationService.GetAllReservations();
-            var reservationDto = _mapper.Map<List<ReservationResponseDto>>(reservations);
-            return Ok(reservationDto);
+            var reservations = await _getReservationQueryHandler.HandleGetAllReservations();
+            var reservationDtos = _mapper.Map<List<ReservationResponseDto>>(reservations);
+            return Ok(reservationDtos);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetReservation(Guid id)
         {
             var query = new GetReservationQuery { Id = id };
-            var reservation = await _getReservationQueryHandler.Handle(query);
-            return Ok(reservation);
+            var reservation = await _getReservationQueryHandler.HandleGetReservationById(query);
+            var reservationDto = _mapper.Map<ReservationResponseDto>(reservation);
+            return Ok(reservationDto);
         }
 
         [HttpPost]

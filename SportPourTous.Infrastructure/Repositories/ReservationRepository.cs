@@ -12,7 +12,7 @@ namespace SportPourTous.Infrastructure.Repositories
 
         public ReservationRepository(DatabaseContext context)
         {
-            _context = context
+            _context = context;
         }
 
         public async Task<Reservation?> GetReservation(Guid id)
@@ -40,15 +40,8 @@ namespace SportPourTous.Infrastructure.Repositories
             return reservation.Id;
         }
 
-        public async Task<Guid> UpdateReservation(Guid id, Reservation updatedReservation)
+        public async Task<Guid> UpdateReservation(Guid id, Reservation reservation)
         {
-            ArgumentNullException.ThrowIfNull(updatedReservation, nameof(updatedReservation));
-
-            var reservation = await GetReservation(id);
-
-            reservation.BeginningHour = updatedReservation.BeginningHour;
-            reservation.EndingHour = updatedReservation.EndingHour;
-
             _context.Reservations.Update(reservation);
             await _context.SaveChangesAsync();
 
