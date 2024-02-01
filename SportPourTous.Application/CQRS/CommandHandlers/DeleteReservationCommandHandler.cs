@@ -1,4 +1,5 @@
 ﻿using SportPourTous.Application.Interfaces;
+using SportPourTous.Domain.CQRS.Commands;
 using SportPourTous.Domain.Interfaces;
 
 namespace SportPourTous.Application.CQRS.CommandHandlers
@@ -7,9 +8,9 @@ namespace SportPourTous.Application.CQRS.CommandHandlers
     {
         private readonly IReservationRepository _repository;
         public DeleteReservationCommandHandler(IReservationRepository repository) => _repository = repository;
-        public async Task Handle(Guid id)
+        public async Task Handle(DeleteReservationCommand command)
         {
-            await _repository.DeleteReservation(id);
+            await _repository.DeleteReservation(command.Id);
         }
     }
 }

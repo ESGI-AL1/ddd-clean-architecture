@@ -86,7 +86,8 @@ namespace SportPourTous.Web.Controllers
         {
             try
             {
-                await _deleteReservationCommandHandler.Handle(id);
+                var command = new DeleteReservationCommand { Id = id };
+                await _deleteReservationCommandHandler.Handle(command);
                 return Ok();
             }
             catch(ReservationNotFoundException ex)
