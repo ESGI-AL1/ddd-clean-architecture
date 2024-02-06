@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SportPourTous.Application.CQRS.CommandHandlers;
 using SportPourTous.Application.Interfaces;
 using SportPourTous.Application.Services;
+using SportPourTous.Application.Validators;
 using SportPourTous.Domain.Entities;
 using SportPourTous.Domain.Interfaces;
 using SportPourTous.Infrastructure.Database;

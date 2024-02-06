@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using SportPourTous.Domain.Entities;
+using SportPourTous.Web.DTO;
 
-namespace SportPourTous.Web.DTO.Mapping
+namespace SportPourTous.Web.Mappings
 {
     public class ReservationResponseProfile : Profile
     {

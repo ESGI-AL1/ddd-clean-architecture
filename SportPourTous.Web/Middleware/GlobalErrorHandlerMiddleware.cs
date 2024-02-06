@@ -3,20 +3,14 @@ using System.Net;
 
 namespace SportPourTous.Web.Middleware
 {
-    public class GlobalErrorHandlerMiddleware
+    public class GlobalErrorHandlerMiddleware(RequestDelegate next)
     {
-        private readonly RequestDelegate _next;
-
-        public GlobalErrorHandlerMiddleware(RequestDelegate next)
-        {
-            _next = next;
-        }
 
         public async Task Invoke(HttpContext context)
         {
             try
             {
-                await _next(context);
+                await next(context);
             }
             catch (Exception ex)
             {

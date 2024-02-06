@@ -13,41 +13,27 @@ namespace SportPourTous.Web.Controllers
 {
     [ApiController]
     [Route("api/reservations")]
-    public class ReservationsController : ControllerBase
+    public class ReservationsController(IReservationService reservationService,
+        IGetReservationQueryHandler getReservationQueryHandler,
+        IDeleteReservationCommandHandler deleteReservationCommandHandler,
+        ICreateReservationCommandHandler createReservationCommandHandler,
+        IMapper mapper) : ControllerBase
     {
-        private readonly IReservationService _reservationService;
-        private readonly IGetReservationQueryHandler _getReservationQueryHandler;
-        private readonly IDeleteReservationCommandHandler _deleteReservationCommandHandler;
-        private readonly ICreateReservationCommandHandler _createReservationCommandHandler;
-        private readonly IMapper _mapper;
-
-        public ReservationsController(IReservationService reservationService, 
-                                      IGetReservationQueryHandler getReservationQueryHandler,
-                                      IDeleteReservationCommandHandler deleteReservationCommandHandler,
-                                      ICreateReservationCommandHandler createReservationCommandHandler,
-                                      IMapper mapper)
-        {
-            _reservationService = reservationService;
-            _getReservationQueryHandler = getReservationQueryHandler;
-            _deleteReservationCommandHandler = deleteReservationCommandHandler;
-            _createReservationCommandHandler = createReservationCommandHandler;
-            _mapper = mapper;
-        }
-
+        
         [HttpGet]
         public async Task<IActionResult> GetAllReservations()
         {
-            var reservations = await _getReservationQueryHandler.HandleGetAllReservations();
-            var reservationDtos = _mapper.Map<List<ReservationResponseDto>>(reservations);
-            return Ok(reservationDtos);
+            var reservations = await getReservationQueryHandler.HandleGetAllReservations();
+            var reservationDto = mapper.Map<List<ReservationResponseDto>>(reservations);
+            return Ok(reservationDto);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetReservation(Guid id)
         {
             var query = new GetReservationQuery { Id = id };
-            var reservation = await _getReservationQueryHandler.HandleGetReservationById(query);
-            var reservationDto = _mapper.Map<ReservationResponseDto>(reservation);
+            var reservation = await getReservationQueryHandler.HandleGetReservationById(query);
+            var reservationDto = mapper.Map<ReservationResponseDto>(reservation);
             return Ok(reservationDto);
         }
 
@@ -56,8 +42,8 @@ namespace SportPourTous.Web.Controllers
         {
             try
             {
-                var command = _mapper.Map<CreateReservationCommand>(reservation);
-                var reservationId = await _createReservationCommandHandler.HandleCreateReservation(command);
+                var command = mapper.Map<CreateReservationCommand>(reservation);
+                var reservationId = await createReservationCommandHandler.HandleCreateReservation(command);
                 var reservationDto = new ReservationIdResponseDto { Id = reservationId };
                 return CreatedAtAction(nameof(GetReservation), new { id = reservationId }, reservationDto);
             }
@@ -72,7 +58,7 @@ namespace SportPourTous.Web.Controllers
         {
             try
             {
-                await _reservationService.UpdateReservation(id, updatedReservation);
+                await reservationService.UpdateReservation(id, updatedReservation);
                 return NoContent();
             }
             catch(ReservationNotFoundException ex)
@@ -87,7 +73,7 @@ namespace SportPourTous.Web.Controllers
             try
             {
                 var command = new DeleteReservationCommand { Id = id };
-                await _deleteReservationCommandHandler.Handle(command);
+                await deleteReservationCommandHandler.Handle(command);
                 return Ok();
             }
             catch(ReservationNotFoundException ex)

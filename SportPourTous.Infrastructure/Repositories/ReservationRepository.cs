@@ -6,18 +6,12 @@ using SportPourTous.Infrastructure.Exceptions;
 
 namespace SportPourTous.Infrastructure.Repositories
 {
-    public class ReservationRepository : IReservationRepository
+    public class ReservationRepository(DatabaseContext context) : IReservationRepository
     {
-        private readonly DatabaseContext _context;
-
-        public ReservationRepository(DatabaseContext context)
-        {
-            _context = context;
-        }
-
         public async Task<Reservation?> GetReservation(Guid id)
         {
-            var reservation = await _context.Reservations.FindAsync(id);
+            var reservation = await context.Reservations.FindAsync(id);
+            
             if (reservation == null)
             {
                 throw new ReservationNotFoundException(id);
@@ -27,23 +21,23 @@ namespace SportPourTous.Infrastructure.Repositories
 
         public async Task<IEnumerable<Reservation>> GetAllReservations()
         {
-            return await _context.Reservations.ToListAsync();
+            return await context.Reservations.ToListAsync();
         }
 
         public async Task<Guid> CreateReservation(Reservation reservation)
         {
             ArgumentNullException.ThrowIfNull(reservation, nameof(reservation));
 
-            await _context.Reservations.AddAsync(reservation);
-            await _context.SaveChangesAsync();
+            await context.Reservations.AddAsync(reservation);
+            await context.SaveChangesAsync();
 
             return reservation.Id;
         }
 
         public async Task<Guid> UpdateReservation(Guid id, Reservation reservation)
         {
-            _context.Reservations.Update(reservation);
-            await _context.SaveChangesAsync();
+            context.Reservations.Update(reservation);
+            await context.SaveChangesAsync();
 
             return reservation.Id;
         }
@@ -51,8 +45,13 @@ namespace SportPourTous.Infrastructure.Repositories
         public async Task DeleteReservation(Guid id)
         {
             var reservation = await GetReservation(id);
-            _context.Reservations.Remove(reservation);
-            await _context.SaveChangesAsync();
+            
+            if (reservation == null)
+            {
+                throw new ReservationNotFoundException(id);
+            }
+            context.Reservations.Remove(reservation);
+            await context.SaveChangesAsync();
         }
     }
 }

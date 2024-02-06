@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace SportPourTous.Application.Services
+namespace SportPourTous.Application.Validators
 {
     public class ReservationValidator : AbstractValidator<Reservation>
     {
