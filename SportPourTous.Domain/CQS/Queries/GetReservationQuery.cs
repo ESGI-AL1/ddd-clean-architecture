@@ -1,4 +1,4 @@
-﻿namespace SportPourTous.Domain.CQRS.Queries
+﻿namespace SportPourTous.Domain.CQS.Queries
 {
     public class GetReservationQuery
     {

@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 using SportPourTous.Application.Interfaces;
-using SportPourTous.Domain.CQRS.Commands;
+using SportPourTous.Domain.CQS.Commands;
 using SportPourTous.Domain.Entities;
 using SportPourTous.Domain.Interfaces;
 
-namespace SportPourTous.Application.CQRS.CommandHandlers
+namespace SportPourTous.Application.CQS.CommandHandlers
 {
     public class CreateReservationCommandHandler : ICreateReservationCommandHandler
     {

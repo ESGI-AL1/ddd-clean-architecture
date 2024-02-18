@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SportPourTous.Domain.CQRS.Commands
+namespace SportPourTous.Domain.CQS.Commands
 {
     public class DeleteReservationCommand
     {

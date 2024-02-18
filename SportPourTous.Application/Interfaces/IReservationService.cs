@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SportPourTous.Domain.Interfaces
+namespace SportPourTous.Application.Interfaces
 {
     public interface IReservationService
     {

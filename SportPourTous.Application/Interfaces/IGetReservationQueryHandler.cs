@@ -1,4 +1,4 @@
-﻿using SportPourTous.Domain.CQRS.Queries;
+﻿using SportPourTous.Domain.CQS.Queries;
 using SportPourTous.Domain.Entities;
 
 namespace SportPourTous.Application.Interfaces

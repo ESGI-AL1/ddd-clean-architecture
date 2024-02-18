@@ -1,6 +1,6 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using SportPourTous.Application.CQRS.CommandHandlers;
+using SportPourTous.Application.CQS.CommandHandlers;
 using SportPourTous.Application.Interfaces;
 using SportPourTous.Application.Services;
 using SportPourTous.Application.Validators;

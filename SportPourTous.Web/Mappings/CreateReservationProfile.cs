@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
-using SportPourTous.Domain.CQRS.Commands;
+using SportPourTous.Domain.CQS.Commands;
+using SportPourTous.Web.DTO;
 
-namespace SportPourTous.Web.DTO.Mapping
+namespace SportPourTous.Web.Mappings
 {
     public class CreateReservationProfile : Profile
     {

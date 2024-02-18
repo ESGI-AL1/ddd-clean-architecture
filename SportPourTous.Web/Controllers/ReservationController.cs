@@ -2,10 +2,9 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using SportPourTous.Application.Interfaces;
-using SportPourTous.Domain.CQRS.Commands;
-using SportPourTous.Domain.CQRS.Queries;
+using SportPourTous.Domain.CQS.Commands;
+using SportPourTous.Domain.CQS.Queries;
 using SportPourTous.Domain.Entities;
-using SportPourTous.Domain.Interfaces;
 using SportPourTous.Infrastructure.Exceptions;
 using SportPourTous.Web.DTO;
 

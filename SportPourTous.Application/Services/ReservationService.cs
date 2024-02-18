@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
+using SportPourTous.Application.Interfaces;
 using SportPourTous.Domain.Entities;
 using SportPourTous.Domain.Interfaces;
 using SportPourTous.Infrastructure.Exceptions;

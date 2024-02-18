@@ -1,5 +1,5 @@
 ﻿using SportPourTous.Application.Interfaces;
-using SportPourTous.Domain.CQRS.Queries;
+using SportPourTous.Domain.CQS.Queries;
 using SportPourTous.Domain.Entities;
 using SportPourTous.Domain.Interfaces;
 using SportPourTous.Infrastructure.Exceptions;
