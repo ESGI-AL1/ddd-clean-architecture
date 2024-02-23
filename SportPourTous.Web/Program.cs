@@ -2,7 +2,6 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using SportPourTous.Application.CQS.CommandHandlers;
 using SportPourTous.Application.Interfaces;
-using SportPourTous.Application.Services;
 using SportPourTous.Application.Validators;
 using SportPourTous.Domain.Entities;
 using SportPourTous.Domain.Interfaces;
@@ -13,9 +12,9 @@ using SportPourTous.Web.Middleware;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
-builder.Services.AddScoped<IReservationService, ReservationService>();
 builder.Services.AddScoped<IGetReservationQueryHandler, GetReservationQueryHandler>();
 builder.Services.AddScoped<IDeleteReservationCommandHandler, DeleteReservationCommandHandler>();
+builder.Services.AddScoped<IUpdateReservationCommandHandler, UpdateReservationCommandHandler>();
 builder.Services.AddScoped<ICreateReservationCommandHandler, CreateReservationCommandHandler>();
 
 builder.Services.AddScoped<IValidator<Reservation>, ReservationValidator>();

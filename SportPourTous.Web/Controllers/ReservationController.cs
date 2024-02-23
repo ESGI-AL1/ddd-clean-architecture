@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using SportPourTous.Application.Interfaces;
 using SportPourTous.Domain.CQS.Commands;
 using SportPourTous.Domain.CQS.Queries;
-using SportPourTous.Domain.Entities;
 using SportPourTous.Infrastructure.Exceptions;
 using SportPourTous.Web.DTO;
 
@@ -12,10 +11,11 @@ namespace SportPourTous.Web.Controllers
 {
     [ApiController]
     [Route("api/reservations")]
-    public class ReservationsController(IReservationService reservationService,
+    public class ReservationsController(
         IGetReservationQueryHandler getReservationQueryHandler,
         IDeleteReservationCommandHandler deleteReservationCommandHandler,
         ICreateReservationCommandHandler createReservationCommandHandler,
+        IUpdateReservationCommandHandler updateReservationCommandHandler,
         IMapper mapper) : ControllerBase
     {
         
@@ -53,12 +53,14 @@ namespace SportPourTous.Web.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateReservation(Guid id, Reservation updatedReservation)
+        public async Task<IActionResult> UpdateReservation(Guid id, UpdateReservationDto reservation)
         {
             try
             {
-                await reservationService.UpdateReservation(id, updatedReservation);
-                return NoContent();
+                var command = mapper.Map<UpdateReservationCommand>(reservation);
+                var updatedReservation = await updateReservationCommandHandler.HandleUpdateReservation(id, command);
+                var reservationDto = new ReservationIdResponseDto { Id = updatedReservation };
+                return Ok(reservationDto);
             }
             catch(ReservationNotFoundException ex)
             {
