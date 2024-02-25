@@ -4,6 +4,7 @@ using SportPourTous.Application.Interfaces;
 using SportPourTous.Domain.CQS.Commands;
 using SportPourTous.Domain.Entities;
 using SportPourTous.Domain.Interfaces;
+using SportPourTous.Domain.ValueObjects;
 
 namespace SportPourTous.Application.CQS.CommandHandlers
 {
@@ -17,23 +18,28 @@ namespace SportPourTous.Application.CQS.CommandHandlers
             _reservationRepository = repository;
             _validator = validator;
         }
-        public async Task<Guid> HandleCreateReservation(CreateReservationCommand reservation)
+        public async Task<Guid> HandleCreateReservation(CreateReservationCommand command)
         {
-            var reservationToCreate = new Reservation
+            var prestation = command.MealTray == true || command.BusAccess == true
+                ? new Prestation(command.MealTray ?? false, command.BusAccess ?? false)
+                : null;
+
+            var reservation = new Reservation
             {
                 Id = Guid.NewGuid(),
-                ReservationDate = reservation.ReservationDate,
-                BeginningHour = reservation.BeginningHour,
-                EndingHour = reservation.EndingHour
+                ReservationDate = command.ReservationDate,
+                BeginningHour = command.BeginningHour,
+                EndingHour = command.EndingHour,
+                Prestation = prestation
             };
 
-            ValidationResult result = _validator.Validate(reservationToCreate);
+            ValidationResult result = _validator.Validate(reservation);
             if (!result.IsValid)
             {
                 throw new ValidationException("Invalid reservation data", result.Errors);
             }
 
-            return await _reservationRepository.CreateReservation(reservationToCreate);
+            return await _reservationRepository.CreateReservation(reservation);
         }
     }
 }

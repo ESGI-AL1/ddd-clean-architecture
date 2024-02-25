@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SportPourTous.Domain.ValueObjects;
 
 namespace SportPourTous.Domain.Entities
 {
@@ -12,5 +8,6 @@ namespace SportPourTous.Domain.Entities
         public DateTime ReservationDate { get; set; }
         public DateTime BeginningHour { get; set; }
         public DateTime EndingHour { get; set; }
+        public Prestation? Prestation { get; set; }
     }
 }

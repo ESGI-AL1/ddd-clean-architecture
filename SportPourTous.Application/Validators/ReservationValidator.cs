@@ -1,12 +1,5 @@
 ﻿using FluentValidation;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using SportPourTous.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace SportPourTous.Application.Validators
 {

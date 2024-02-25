@@ -36,21 +36,21 @@ namespace SportPourTous.Web.Controllers
             return Ok(reservationDto);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateReservation(CreateReservationDto reservation)
-        {
-            try
-            {
-                var command = mapper.Map<CreateReservationCommand>(reservation);
-                var reservationId = await createReservationCommandHandler.HandleCreateReservation(command);
-                var reservationDto = new ReservationIdResponseDto { Id = reservationId };
-                return CreatedAtAction(nameof(GetReservation), new { id = reservationId }, reservationDto);
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(ex.Errors);
-            }
-        }
+[HttpPost]
+public async Task<IActionResult> CreateReservation(CreateReservationDto dto)
+{
+    try
+    {
+        var command = mapper.Map<CreateReservationCommand>(dto);
+        var reservationId = await createReservationCommandHandler.HandleCreateReservation(command);
+        var responseDto = new ReservationIdResponseDto { Id = reservationId };
+        return CreatedAtAction(nameof(GetReservation), new { id = reservationId }, responseDto);
+    }
+    catch (ValidationException ex)
+    {
+        return BadRequest(ex.Errors);
+    }
+}
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateReservation(Guid id, UpdateReservationDto reservation)

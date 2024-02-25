@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using SportPourTous.Application.CQS.CommandHandlers;
@@ -19,10 +20,16 @@ builder.Services.AddScoped<ICreateReservationCommandHandler, CreateReservationCo
 
 builder.Services.AddScoped<IValidator<Reservation>, ReservationValidator>();
 
-builder.Services.AddDbContext<DatabaseContext>(opt => opt.UseInMemoryDatabase("reservations"));
-builder.Services.AddControllers();
+builder.Services.AddDbContext<DatabaseContext>(opt => 
+    opt.UseInMemoryDatabase("reservations"));
+
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+});
 
 builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

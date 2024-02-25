@@ -1,17 +1,25 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SportPourTous.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SportPourTous.Infrastructure.Database
 {
     public class DatabaseContext : DbContext
     {
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) { }
-        public DbSet<Reservation> Reservations { get; set; } = null!;
-    }
 
+        public DbSet<Reservation> Reservations { get; set; } = null!;
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Reservation>().OwnsOne(p => p.Prestation, prestation =>
+            {
+                prestation.WithOwner();
+
+                prestation.Property(p => p.Meal).HasColumnName("MealTray");
+                prestation.Property(p => p.Bus).HasColumnName("BusAccess");
+            });
+        }
+    }
 }
